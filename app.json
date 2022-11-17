@@ -2,6 +2,7 @@
   "expo": {
     "name": "nwlmobile",
     "slug": "nwlmobile",
+    "scheme": "nwlmobile",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
