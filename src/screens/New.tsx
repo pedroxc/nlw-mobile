@@ -1,8 +1,9 @@
 import { useState } from "react";
+import { Image } from "react-native";
 import { Heading, Text, Toast, VStack } from "native-base";
 import { Header } from "../components/Header";
 
-import Logo from "../assets/logo.svg";
+import logo from "../assets/logo.svg";
 import { Input } from "../components/Input";
 import { Button } from "../components/Button";
 import { useToast } from "native-base";
@@ -45,7 +46,10 @@ export function New() {
     <VStack flex={1} bgColor="gray.900">
       <Header title="Criar Novo Bolão" />
       <VStack mt={8} mx={5} alignItems="center">
-        <Logo />
+        <Image
+          source={logo}
+          style={{ tintColor: "white", width: 212, height: 40 }}
+        />
         <Heading
           fontFamily="heading"
           color="white"
