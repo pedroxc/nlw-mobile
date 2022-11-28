@@ -36,6 +36,8 @@ export function Game({
   setSecondTeamPoints,
   onGuessConfirm,
 }: Props) {
+  const today = new Date();
+  const gameDate = new Date(data.date);
   const when = dayjs(data.date)
     .locale(ptbr)
     .format("DD [de] MMMM [de] YYYY [às] HH:00[h]");
@@ -52,52 +54,83 @@ export function Game({
       mb={3}
       p={4}
     >
-      <Text color="gray.100" fontFamily="heading" fontSize="sm">
-        {getName(data.firstTeamCountryCode)} vs.{" "}
-        {getName(data.secondTeamCountryCode)}
-      </Text>
+      {today < gameDate ? (
+        <>
+          <Text color="gray.100" fontFamily="heading" fontSize="sm">
+            {getName(data.firstTeamCountryCode)} vs.{" "}
+            {getName(data.secondTeamCountryCode)}
+          </Text>
+          <Text color="gray.200" fontSize="xs">
+            {when}
+          </Text>
+          <HStack
+            mt={4}
+            w="full"
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Team
+              code={data.firstTeamCountryCode}
+              position="right"
+              onChangeText={setFirstTeamPoints}
+            />
 
-      <Text color="gray.200" fontSize="xs">
-        {when}
-      </Text>
+            <X color={colors.gray[300]} size={sizes[6]} />
 
-      <HStack
-        mt={4}
-        w="full"
-        justifyContent="space-between"
-        alignItems="center"
-      >
-        <Team
-          code={data.firstTeamCountryCode}
-          position="right"
-          onChangeText={setFirstTeamPoints}
-        />
-
-        <X color={colors.gray[300]} size={sizes[6]} />
-
-        <Team
-          code={data.secondTeamCountryCode}
-          position="left"
-          onChangeText={setSecondTeamPoints}
-        />
-      </HStack>
-
-      {!data.guess && (
-        <Button
-          size="xs"
-          w="full"
-          bgColor="green.500"
-          mt={4}
-          onPress={onGuessConfirm}
-        >
-          <HStack alignItems="center">
-            <Text color="white" fontSize="xs" fontFamily="heading" mr={3}>
-              CONFIRMAR PALPITE
-            </Text>
-
-            <Check color={colors.white} size={sizes[4]} />
+            <Team
+              code={data.secondTeamCountryCode}
+              position="left"
+              onChangeText={setSecondTeamPoints}
+            />
           </HStack>
-        </Button>
+          {!data.guess && (
+            <Button
+              size="xs"
+              w="full"
+              bgColor="green.500"
+              mt={4}
+              onPress={onGuessConfirm}
+            >
+              <HStack alignItems="center">
+                <Text color="white" fontSize="xs" fontFamily="heading" mr={3}>
+                  CONFIRMAR PALPITE
+                </Text>
+
+                <Check color={colors.white} size={sizes[4]} />
+              </HStack>
+            </Button>
+          )}
+        </>
+      ) : (
+        <>
+          <Text color="gray.100" fontFamily="heading" fontSize="sm">
+            {getName(data.firstTeamCountryCode)} vs.{" "}
+            {getName(data.secondTeamCountryCode)}
+          </Text>
+          <Text color="gray.200" fontSize="xs">
+            {when}
+          </Text>
+          <HStack
+            mt={4}
+            w="full"
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Team
+              code={data.firstTeamCountryCode}
+              position="right"
+              onChangeText={setFirstTeamPoints}
+            />
+
+            <X color={colors.gray[300]} size={sizes[6]} />
+
+            <Team
+              code={data.secondTeamCountryCode}
+              position="left"
+              onChangeText={setSecondTeamPoints}
+            />
+          </HStack>
+        </>
       )}
     </VStack>
   );

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { Box, FlatList, useToast } from "native-base";
+import { Box, FlatList, Text, useToast, VStack } from "native-base";
 import { api } from "../services/api";
+import { ScrollView } from "react-native";
 
 import { GameProps, Game } from "../components/Game";
 import { Loading } from "./Loading";
@@ -14,15 +15,21 @@ interface Props {
 export function Guesses({ poolId, code }: Props) {
   const [isLoading, setIsLoading] = useState(false);
   const [games, setGames] = useState<GameProps[]>([]);
+  const [passedGames, setPassedGames] = useState<GameProps[]>([]);
   const [firstTeamPoints, setFirstTeamPoints] = useState("");
   const [secondTeamPoints, setSecondTeamPoints] = useState("");
   const toast = useToast();
+  const today = new Date();
 
   async function fetchGames() {
     try {
       setIsLoading(true);
       const response = await api.get(`/pools/${poolId}/games`);
-      setGames(response.data.games);
+      const array = response.data.games;
+      const filtered = array.filter((e) => new Date(e.date) > today);
+      const old = array.filter((e) => new Date(e.date) < today);
+      setPassedGames(old);
+      setGames(filtered);
     } catch (err) {
       console.log(err);
       toast.show({
@@ -77,18 +84,41 @@ export function Guesses({ poolId, code }: Props) {
     return <Loading />;
   }
   return (
-    <FlatList
-      data={games}
-      ListEmptyComponent={<EmptyMyPoolList code={code} />}
-      keyExtractor={(item) => item.id}
-      renderItem={({ item }) => (
-        <Game
-          data={item}
-          setFirstTeamPoints={setFirstTeamPoints}
-          setSecondTeamPoints={setSecondTeamPoints}
-          onGuessConfirm={() => handleGuessConfirm(item.id)}
-        />
-      )}
-    />
+    <VStack flex={1} maxH="full">
+      <FlatList
+        data={games}
+        ListEmptyComponent={<EmptyMyPoolList code={code} />}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <Game
+            data={item}
+            setFirstTeamPoints={setFirstTeamPoints}
+            setSecondTeamPoints={setSecondTeamPoints}
+            onGuessConfirm={() => handleGuessConfirm(item.id)}
+          />
+        )}
+        ListFooterComponent={
+          <FlatList
+            flexGrow={1}
+            data={passedGames}
+            ListHeaderComponent={
+              <Text color="gray.200" fontSize="xs">
+                Jogos Passados!
+              </Text>
+            }
+            ListEmptyComponent={<EmptyMyPoolList code={code} />}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => (
+              <Game
+                data={item}
+                setFirstTeamPoints={setFirstTeamPoints}
+                setSecondTeamPoints={setSecondTeamPoints}
+                onGuessConfirm={() => handleGuessConfirm(item.id)}
+              />
+            )}
+          />
+        }
+      />
+    </VStack>
   );
 }

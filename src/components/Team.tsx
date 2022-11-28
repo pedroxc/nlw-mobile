@@ -6,10 +6,18 @@ import { Input } from "./Input";
 interface Props {
   code: string;
   position: "left" | "right";
-  onChangeText: (value: string) => void;
+  onChangeText?: (value: string) => void;
+  value?: string;
+  isDisabled?: boolean;
 }
 
-export function Team({ code, position, onChangeText }: Props) {
+export function Team({
+  code,
+  position,
+  onChangeText,
+  value,
+  isDisabled,
+}: Props) {
   return (
     <HStack alignItems="center">
       {position === "left" && (
@@ -23,6 +31,8 @@ export function Team({ code, position, onChangeText }: Props) {
         fontSize="xs"
         keyboardType="numeric"
         onChangeText={onChangeText}
+        value={value}
+        isDisabled={isDisabled}
       />
 
       {position === "right" && (

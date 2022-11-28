@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { HStack, useToast, VStack } from "native-base";
+import { HStack, Text, useToast, VStack } from "native-base";
 import { Share } from "react-native";
 import { Header } from "../components/Header";
 import { useRoute } from "@react-navigation/native";
@@ -10,6 +10,7 @@ import { PoolHeader } from "../components/PoolHeader";
 import { EmptyMyPoolList } from "../components/EmptyMyPoolList";
 import { Option } from "../components/Option";
 import { Guesses } from "../components/Guesses";
+import { GuessesRanking } from "../components/GuessesRanking";
 
 interface RouteParams {
   id: string;
@@ -55,7 +56,7 @@ export function Details() {
   }
 
   return (
-    <VStack flex={1} bgColor="gray.900">
+    <VStack flex={1} bgColor="gray.900" maxH="90%">
       <Header
         title={poolDetails.title}
         showBackButton
@@ -67,17 +68,23 @@ export function Details() {
           <PoolHeader data={poolDetails} />
           <HStack bgColor="gray.800" p={1} rounded="sm" mb={5}>
             <Option
-              title="Seus palpites"
+              title="Jogos"
               isSelected={optionsSelecteted === "guesses"}
               onPress={() => setOptionsSelected("guesses")}
             />
             <Option
-              title="Ranking do Grupo"
+              title="Palpites do Grupo"
               isSelected={optionsSelecteted === "ranking"}
               onPress={() => setOptionsSelected("ranking")}
             />
           </HStack>
-          <Guesses poolId={poolDetails.id} code={poolDetails.code} />
+
+          {optionsSelecteted === `guesses` && (
+            <Guesses poolId={poolDetails.id} code={poolDetails.code} />
+          )}
+          {optionsSelecteted === "ranking" && (
+            <GuessesRanking poolId={poolDetails.id} />
+          )}
         </VStack>
       ) : (
         <EmptyMyPoolList code={poolDetails.code} />

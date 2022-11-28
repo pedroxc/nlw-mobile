@@ -7,6 +7,7 @@ import { useNavigation } from "@react-navigation/native";
 import { api } from "../services/api";
 import { PoolCard, PoolPros } from "../components/PoolCard";
 import { Loading } from "../components/Loading";
+
 import { EmptyPoolList } from "../components/EmptyPoolList";
 import { useFocusEffect } from "@react-navigation/native";
 
@@ -38,7 +39,7 @@ export function Pools() {
     }, [])
   );
   return (
-    <VStack flex={1} bgColor="gray.900">
+    <VStack bgColor="gray.900" flex={1}>
       <Header title="Meus Bolões" />
 
       <VStack
